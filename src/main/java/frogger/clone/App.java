@@ -1,12 +1,20 @@
 /* Licensed under MIT 2019 */
 package frogger.clone;
 
-public class App {
-  public String getGreeting() {
-    return "Hello world.";
+import processing.core.PApplet;
+
+public class App extends PApplet {
+  public static void main(String[] args) {
+    PApplet.main(App.class.getName());
   }
 
-  public static void main(String[] args) {
-    System.out.println(new App().getGreeting());
+  public void settings() {
+    size(1000, 1000);
   }
+
+  public void setup() {
+    surface.setResizable(true);
+  }
+
+  public void draw() {}
 }
