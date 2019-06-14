@@ -74,7 +74,6 @@ public class Player {
    * @return an instance of {@link Player}
    */
   public Player render() {
-    sketch.fill(128);
     sketch.ellipse(
         this.position.x,
         this.position.y,
