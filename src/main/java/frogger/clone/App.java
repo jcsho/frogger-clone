@@ -7,11 +7,15 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
 package frogger.clone;
 
+import frogger.clone.Obstacles.Obstacle;
+import frogger.clone.Obstacles.Vehicle;
 import processing.core.PApplet;
 
 public class App extends PApplet {
 
   private Player player;
+
+  private Obstacle truck;
 
   public static void main(String[] args) {
     PApplet.main(App.class.getName());
@@ -28,10 +32,21 @@ public class App extends PApplet {
         new Player(this)
             .setPosition(this.width / 2, this.height - (this.height / 10))
             .setSize(this.width / 10, this.height / 10);
+
+    truck =
+        new Vehicle(this)
+            .setPosition(0, this.height / 2)
+            .setSize(this.width / 10, this.height / 20)
+            .setSpeed(3)
+            .setResetPosition(width);
   }
 
   public void draw() {
+    this.background(255);
     player.render();
+
+    truck.render();
+    truck.move();
   }
 
   public void keyPressed() {
