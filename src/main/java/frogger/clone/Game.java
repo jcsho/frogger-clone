@@ -19,7 +19,8 @@ public class Game {
   private int obstaclePerRow;
   private int obstacleHeight;
   private int obstacleWidth;
-  private int obstacleSpeed;
+
+  private static int SECTION = 3;
 
   public Game(PApplet sketch) {
     this.sketch = sketch;
@@ -37,47 +38,47 @@ public class Game {
     return this;
   }
 
-  public Game setObstacleSpeed(int speed) {
-    this.obstacleSpeed = speed;
-    return this;
-  }
-
   public Game setupGame() {
     this.obstacles = new ArrayList<Obstacle>(this.numOfRows * this.obstaclePerRow);
     for (int row = 1; row < numOfRows - 1; row++) {
-      // int rand = (int) this.sketch.random(2, 6);
-      int startPosition = 0 - (this.obstacleWidth);
-      int resetPosition = this.sketch.width + this.obstacleWidth;
-      int direction = this.obstacleSpeed;
-      int interval = this.obstacleWidth * 3;
+      if ((row % SECTION) != 0) {
+        int rand = (int) this.sketch.random(1, 3);
+        int startPosition = 0 - (this.obstacleWidth);
+        int resetPosition = this.sketch.width + this.obstacleWidth;
+        int direction = rand;
+        int interval = this.obstacleWidth * 3;
 
-      if ((row % 2) == 0) {
-        startPosition = this.sketch.width + this.obstacleWidth;
-        resetPosition = 0 - (this.obstacleWidth);
-        direction = -direction;
-        interval = -interval;
-      }
+        if ((row % 2) == 0) {
+          startPosition = this.sketch.width + this.obstacleWidth;
+          resetPosition = 0 - (this.obstacleWidth);
+          direction = -direction;
+          interval = -interval;
+        }
 
-      for (int obstacle = 0; obstacle < obstaclePerRow; obstacle++) {
-        this.obstacles.add(
-            new Vehicle(this.sketch)
-                .setPosition(
-                    startPosition - (interval * obstacle),
-                    (row * this.obstacleHeight) + (this.obstacleHeight / 2))
-                .setSize(this.obstacleWidth, this.obstacleHeight)
-                .setResetPosition(resetPosition)
-                .setSpeed(direction));
+        for (int obstacle = 0; obstacle < obstaclePerRow; obstacle++) {
+          this.obstacles.add(
+              new Vehicle(this.sketch)
+                  .setPosition(
+                      startPosition - (interval * obstacle),
+                      (row * this.obstacleHeight) + (this.obstacleHeight / 2))
+                  .setSize(this.obstacleWidth, this.obstacleHeight)
+                  .setResetPosition(resetPosition)
+                  .setSpeed(direction));
+        }
       }
     }
 
     return this;
   }
 
-  public void drawMap() {
+  public void drawMap(Player player) {
     for (int obstacle = 0; obstacle < obstacles.size(); obstacle++) {
       Obstacle o = this.obstacles.get(obstacle);
       o.render();
       o.move();
+      if (player.collideWithObstacle(o)) {
+        player.reset();
+      }
     }
   }
 }

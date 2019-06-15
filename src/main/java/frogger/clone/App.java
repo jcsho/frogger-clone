@@ -15,31 +15,46 @@ public class App extends PApplet {
 
   private Game game;
 
+  // ! single vehicle for debugging
+  // private Obstacle vehicle;
+
   public static void main(String[] args) {
     PApplet.main(App.class.getName());
   }
 
   public void settings() {
-    size(1000, 1000);
+    size(1280, 1280);
   }
 
   public void setup() {
     surface.setResizable(true);
 
+    // ! single vehicle for debugging
+    // this.vehicle = new Vehicle(this).setPosition(this.width /2, this.height
+    // /2).setSize(this.height/ 5, this.height / 10);
+
     this.player =
         new Player(this)
             .setPosition(this.width / 2, this.height - (this.height / 20))
-            .setSize(this.width / 10, this.height / 10);
+            .setSize(this.width / 10, this.height / 10)
+            .setColor(255);
 
-    this.game =
-        new Game(this).setNumOfRows(10).setObstaclePerRow(3).setObstacleSpeed(2).setupGame();
+    this.game = new Game(this).setNumOfRows(10).setObstaclePerRow(3).setupGame();
   }
 
   public void draw() {
     this.background(255);
     this.player.render();
 
-    this.game.drawMap();
+    // ! single vehicle for debugging
+    // this.vehicle.render();
+    // if (this.player.collideWithObstacle(this.vehicle)) {
+    //   this.player.setColor(0xFF00FF00);
+    // }  else {
+    //   this.player.setColor(255);
+    // }
+
+    this.game.drawMap(this.player);
   }
 
   public void keyPressed() {
@@ -58,6 +73,10 @@ public class App extends PApplet {
           player.move(Player.Direction.RIGHT);
           break;
       }
+    }
+
+    if (key == 'r' || key == 'R') {
+      player.reset();
     }
   }
 }
