@@ -8,12 +8,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 package frogger.clone.Obstacles;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.core.PVector;
 
 public abstract class Obstacle {
 
   protected PApplet sketch;
   protected PVector position;
+  protected PImage image;
   protected int width;
   protected int height;
   protected int speed;
@@ -43,6 +45,11 @@ public abstract class Obstacle {
 
   public Obstacle setResetPosition(int position) {
     this.resetPosition = position;
+    return this;
+  }
+
+  public Obstacle setImage(PImage image) {
+    this.image = image;
     return this;
   }
 
