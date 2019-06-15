@@ -11,6 +11,7 @@ import frogger.clone.Obstacles.Obstacle;
 import frogger.clone.Obstacles.Vehicle;
 import java.util.ArrayList;
 import processing.core.PApplet;
+import processing.core.PImage;
 
 public class Game {
   private PApplet sketch;
@@ -20,10 +21,18 @@ public class Game {
   private int obstacleHeight;
   private int obstacleWidth;
 
+  private PImage truck;
+  private PImage map;
+
   private static int SECTION = 3;
 
   public Game(PApplet sketch) {
     this.sketch = sketch;
+  }
+
+  public Game setMap(PImage image) {
+    this.map = image;
+    return this;
   }
 
   public Game setNumOfRows(int amount) {
@@ -39,6 +48,7 @@ public class Game {
   }
 
   public Game setupGame() {
+    this.truck = this.sketch.loadImage("truck-left.png");
     this.obstacles = new ArrayList<Obstacle>(this.numOfRows * this.obstaclePerRow);
     for (int row = 1; row < numOfRows - 1; row++) {
       if ((row % SECTION) != 0) {
@@ -61,7 +71,8 @@ public class Game {
                   .setPosition(
                       startPosition - (interval * obstacle),
                       (row * this.obstacleHeight) + (this.obstacleHeight / 2))
-                  .setSize(this.obstacleWidth, this.obstacleHeight)
+                  .setSize(this.truck.width, this.truck.height)
+                  .setImage(this.truck)
                   .setResetPosition(resetPosition)
                   .setSpeed(direction));
         }
@@ -71,7 +82,11 @@ public class Game {
     return this;
   }
 
-  public void drawMap(Player player) {
+  public void render(Player player) {
+    
+    this.sketch.imageMode(PApplet.CENTER);
+    this.sketch.image(map, this.sketch.width / 2, this.sketch.height / 2);
+
     for (int obstacle = 0; obstacle < obstacles.size(); obstacle++) {
       Obstacle o = this.obstacles.get(obstacle);
       o.render();

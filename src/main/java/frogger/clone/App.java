@@ -8,12 +8,20 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 package frogger.clone;
 
 import processing.core.PApplet;
+import processing.core.PImage;
 
 public class App extends PApplet {
+
+  private PImage chickenLeft;
+  private PImage chickenRight;
+  private PImage map;
 
   private Player player;
 
   private Game game;
+
+  private static int ROWS = 10;
+  private static int OBSTACLES = 3;
 
   // ! single vehicle for debugging
   // private Obstacle vehicle;
@@ -33,17 +41,22 @@ public class App extends PApplet {
     // this.vehicle = new Vehicle(this).setPosition(this.width /2, this.height
     // /2).setSize(this.height/ 5, this.height / 10);
 
+    this.chickenLeft = loadImage("chicken-left.png");
+    this.chickenRight = loadImage("chicken-right.png");
+    this.map = loadImage("map.png");
+
     this.player =
         new Player(this)
             .setPosition(this.width / 2, this.height - (this.height / 20))
-            .setSize(this.width / 10, this.height / 10)
-            .setColor(255);
+            .setSize(this.width / ROWS, this.height / ROWS)
+            .setImage(this.chickenLeft, this.chickenRight);
 
-    this.game = new Game(this).setNumOfRows(10).setObstaclePerRow(3).setupGame();
+    this.game = new Game(this).setMap(map).setNumOfRows(ROWS).setObstaclePerRow(OBSTACLES).setupGame();
   }
 
   public void draw() {
     this.background(255);
+    this.game.render(this.player);
     this.player.render();
 
     // ! single vehicle for debugging
@@ -53,8 +66,6 @@ public class App extends PApplet {
     // }  else {
     //   this.player.setColor(255);
     // }
-
-    this.game.drawMap(this.player);
   }
 
   public void keyPressed() {
@@ -73,10 +84,6 @@ public class App extends PApplet {
           player.move(Player.Direction.RIGHT);
           break;
       }
-    }
-
-    if (key == 'r' || key == 'R') {
-      player.reset();
     }
   }
 }

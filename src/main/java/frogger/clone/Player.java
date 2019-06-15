@@ -7,14 +7,19 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
 package frogger.clone;
 
+import static processing.core.PConstants.CENTER;
+
 import frogger.clone.Obstacles.Obstacle;
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.core.PVector;
 
 /** User controllable character */
 public class Player {
   /** Provides access to processing functions */
   private PApplet sketch;
+  private PImage characterLeft;
+  private PImage characterRight;
   /** X and Y coordinate of the player */
   private PVector position;
   /** X and Y coordinate of new position for linear interpolation */
@@ -45,6 +50,12 @@ public class Player {
    */
   public Player(PApplet sketch) {
     this.sketch = sketch;
+  }
+
+  public Player setImage(PImage leftImage, PImage rightImage) {
+    this.characterLeft = leftImage;
+    this.characterRight = rightImage;
+    return this;
   }
 
   /**
@@ -80,11 +91,25 @@ public class Player {
    * @return an instance of {@link Player}
    */
   public Player render() {
-    this.sketch.fill(color);
-    this.sketch.stroke(0);
-    this.sketch.ellipse(
-        this.position.x, this.position.y, this.width, this.height); // use a circle to represent the
+    // this.sketch.fill(color);
+    // this.sketch.stroke(0);
+    // this.sketch.ellipse(
+    //     this.position.x, this.position.y, this.width, this.height); // use a circle to represent the
     // player
+    int reflect = 1;
+
+    if (this.movement.x > this.position.x) {
+      reflect = -1;
+    } else if (this.movement.x < this.position.x) {
+      reflect = 1;
+    }
+
+    this.sketch.pushMatrix();
+    this.sketch.translate(this.position.x, this.position.y);
+    this.sketch.scale(reflect, 1);
+    this.sketch.imageMode(CENTER);
+    this.sketch.image(this.characterLeft, 0, 0);
+    this.sketch.popMatrix();
     this.position.lerp(
         this.movement, lerpAmt); // move the player to the new position if there's a difference
     return this;

@@ -19,7 +19,18 @@ public class Vehicle extends Obstacle {
 
   @Override
   public void render() {
-    this.sketch.rectMode(CENTER);
-    this.sketch.rect(this.position.x, this.position.y, this.width, this.height);
+    // this.sketch.rectMode(CENTER);
+    // this.sketch.rect(this.position.x, this.position.y, this.width, this.height);
+
+    this.sketch.pushMatrix();
+    this.sketch.translate(this.position.x, this.position.y);
+    if (this.speed > 0) {
+      this.sketch.scale(-1, 1);
+    } else {
+      this.sketch.scale(1, 1);
+    }
+    this.sketch.imageMode(CENTER);
+    this.sketch.image(this.image, 0, 0);
+    this.sketch.popMatrix();
   }
 }
